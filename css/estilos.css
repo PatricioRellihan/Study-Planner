@@ -1,0 +1,39 @@
+/* * {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background-color: rgb(230, 230, 230);
+    font-family: 'Montserrat', sans-serif;
+}
+
+li {
+    list-style: none;
+}
+
+h1 {
+    padding: 2rem;
+}
+.materias {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.materias li {
+    background-color: #81C2FE;
+    border-radius: 1rem;
+    margin: 1rem;
+    padding: 1rem;
+    width: 20%;
+   
+}
+
+.temas li {
+    
+} */
+
+#cruz {
+    width: 1rem;
+}
