@@ -28,31 +28,41 @@ function Materia(nombre) {
 
 
         //FALTA ALERT QUE NO PERMITA USAR ESTO SI LA MATERIA TODAVIA NO TIENE NOMBRE
-        //var nombreDeLaMateriaParent = this.parentNode.parentNode.parentNode.firstChild.innerHTML
+
+
         var nombre = document.getElementById("inputNombreTemas" + idTema).value
         temaNuevo = new Tema(nombre)
         this.Temas.push(temaNuevo)
 
         $("#inputNombreTemas" + idTema).replaceWith("<h3>" + temaNuevo.Nombre + "</h3>")
 
+        //Quitarle el disabled al boton para crear subtemas
+        $("#botonCrearSubtema" + idTema).removeAttr("disabled")
 
+        //quitarle el disabled al boton para crear temas
+        $("#botonCrearTema" + idTema).removeAttr("disabled")
 
+        //Eliminar boton para confirmar tema y crear cruz para eliminar tema
+        var liTema = document.getElementById("liTema" + idTema)
+        var nombreDeLaMateriaParent = liTema.parentNode.parentNode.firstChild.innerHTML
+        var nombreDelTema = liTema.firstChild.innerHTML
 
-
-        // FALTA VER COMO APUNTARLE A THIS>this.QuitarTema() !!!!!
-
-        $("#botonConfirmarTema" + idTema).replaceWith('<img src="img/iconos/cruz.png" alt="cruz" id="cruz" onclick="QuitarTema()">')
-    
+        $("#botonConfirmarTema" + idTema).replaceWith('<a href="#"><img src="img/iconos/cruz.png" alt="cruz" class="cruz" id="cruz' + idTema + '" onclick="materias[' + SeleccionarMateriaPertenecienteAEsteTema(nombreDeLaMateriaParent) + '].QuitarTema(' + SeleccionarTemaPertenecienteAEsteSubtema(nombreDeLaMateriaParent, nombreDelTema) + ',' + idTema + ')"></a>')
     }
 
-    this.QuitarTema = function(indiceDeTema) {
-        this.Temas.splice(indiceDeTema,1)
+    this.QuitarTema = function(indiceDeTema, idTema) {
+        this.Temas[indiceDeTema] = null
+        $("#liTema" + idTema).remove()
+
     }
 
     this.SumarTotalHorasMateria = function() {
         //Al inciar reseteo valor de variable para no repetir sumas
-        TotalHorasMateria = 0
+        this.TotalHorasMateria = 0
         for (let indiceTemas = 0; indiceTemas < this.Temas.length; indiceTemas++) {
+            if (this.Temas[indiceTemas] == null) {
+                continue
+            }
             this.TotalHorasMateria += this.Temas[indiceTemas].TotalHorasTema;
         }
         this.TotalHorasFaltantesMateria = this.TotalHorasMateria - this.TotalHorasLeidasMateria
@@ -80,27 +90,39 @@ function Tema(nombre) {
     this.AgregarSubtema = function(idSubtema) {
 
         var nombre = document.getElementById("inputNombreSubtema" + idSubtema).value
-        var horas = document.getElementById("inputHorasSubtema" + idSubtema).value
+        var horas = Number(document.getElementById("inputHorasSubtema" + idSubtema).value)
         subtemaNuevo = new Subtema(nombre, horas)
         this.Subtemas.push(subtemaNuevo)
 
         $("#inputNombreSubtema" + idSubtema).replaceWith("<h4>" + subtemaNuevo.Nombre + "</h4>")
         $("#inputHorasSubtema" + idSubtema).replaceWith("<h5>" + subtemaNuevo.Horas + " hs.</h5>")
 
-        // FALTA VER COMO APUNTARLE A THIS>this.QuitarTema() !!!!!
-
-        $("#botonConfirmarSubtema" + idSubtema).replaceWith('<img src="img/iconos/cruz.png" alt="cruz" id="cruz" onclick="QuitarTema()">')
+        //Quitar boton confirmar y crear cruz para eliminar subtema
+        var liSubtema = document.getElementById("liSubtema" + idSubtema)
+        debugger
+        var nombreDeLaMateriaParent = liSubtema.parentNode.parentNode.parentNode.parentNode.firstChild.innerHTML
+        var nombreDelTemaParent = liSubtema.parentNode.parentNode.firstChild.innerHTML
+        var nombreDelSubtema = liSubtema.firstChild.innerHTML
+        var indiceDeMateria = SeleccionarMateriaPertenecienteAEsteTema(nombreDeLaMateriaParent)
+        var indiceDeTema = SeleccionarTemaPertenecienteAEsteSubtema(nombreDeLaMateriaParent, nombreDelTemaParent)
+        var indiceDeSubtema = SeleccionarIndiceDeEsteSubtema(nombreDeLaMateriaParent, nombreDelTemaParent, nombreDelSubtema)
+        
+        $("#botonConfirmarSubtema" + idSubtema).replaceWith('<a href="#"><img src="img/iconos/cruz.png" alt="cruz" class="cruz" onclick="materias[' + indiceDeMateria + '].Temas[' + indiceDeTema + '].QuitarSubtema(' + indiceDeSubtema + ',' + idSubtema + ')"></a>')
     
     }
     
-    this.QuitarSubtema = function(indiceDeSubtema) {
-        this.Subtemas.splice(indiceDeSubtema,1)
+    this.QuitarSubtema = function(indiceDeSubtema, idSubtema) {
+        this.Subtemas[indiceDeSubtema] = null
+        $("#liSubtema" + idSubtema).remove()
     }
 
     this.SumarTotalHorasTema = function() {
         //Al inciar reseteo valor de variable para no repetir sumas
-        TotalHorasTema = 0
+        this.TotalHorasTema = 0
         for (let indiceSubtemas = 0; indiceSubtemas < this.Subtemas.length; indiceSubtemas++) {
+            if (this.Subtemas[indiceSubtemas] == null) {
+                continue
+            }
             this.TotalHorasTema += this.Subtemas[indiceSubtemas].Horas;
         }
         this.TotalHorasFaltantesTema = this.TotalHorasTema - this.TotalHorasLeidasTema
@@ -108,7 +130,7 @@ function Tema(nombre) {
 
     this.SumarTotalHorasLeidasTema = function() {
         //Al inciar reseteo valor de variable para no repetir sumas
-        TotalHorasLeidasTema = 0
+        this.TotalHorasLeidasTema = 0
         for (let indiceSubtemas = 0; indiceSubtemas < this.Subtemas.length; indiceSubtemas++) {
             this.TotalHorasLeidasTema += this.Subtemas[indiceSubtemas].HorasLeidas; 
         }
@@ -150,12 +172,12 @@ function Subtema(nombre, horas) {
 contadorParaUlTemas = 0
 contadorParaIdMaterias = 0
 function CrearMateria(){
-
         //Crear Materia con input para su nombre y boton para agregarlo
         var ulMaterias = document.getElementById("materias")
 
         var materia = document.createElement("li")
         materia.setAttribute("id", "materia" + contadorParaIdMaterias)
+        materia.setAttribute("class", "liMateria")
         ulMaterias.appendChild(materia)
 
         var inputNombreMateria = document.createElement("input")
@@ -166,7 +188,7 @@ function CrearMateria(){
 
         var botonConfirmarMateria = document.createElement("button")
         botonConfirmarMateria.innerHTML = "Confirmar Materia"
-        botonConfirmarMateria.setAttribute("id", "botonConfirmarMateria" + contadorParaIdTemas)
+        botonConfirmarMateria.setAttribute("id", "botonConfirmarMateria" + contadorParaIdMaterias)
         botonConfirmarMateria.setAttribute("onclick", "AgregarMateria(" + contadorParaIdMaterias + ")")
         materia.appendChild(botonConfirmarMateria)
 
@@ -203,6 +225,7 @@ function CrearTema(IdUlTema) {
     var ulTemas = document.getElementById("temas" + IdUlTema)
 
     var tema = document.createElement("li")
+    tema.setAttribute("id", "liTema" + contadorParaIdTemas)
     ulTemas.insertBefore(tema, ulTemas.lastElementChild)
 
     var inputNombreTema = document.createElement("input")
@@ -236,6 +259,8 @@ function CrearTema(IdUlTema) {
     botonCrearSubtema.setAttribute("id", "botonCrearSubtema" + contadorParaUlSubtemas)
     liBotonCrearSubtema.appendChild(botonCrearSubtema)
 
+    //Hago el boton unclickeable para que no se pueda agregar una materia sin haber confirmado la anterior
+    $("#botonCrearTema" + contadorParaIdTemas).attr("disabled", "true")
     
     contadorParaUlSubtemas++
     contadorParaIdTemas++
@@ -244,19 +269,20 @@ function CrearTema(IdUlTema) {
 var contadorParaIDSubtemas = 0
 function CrearSubtema(IdUlSubtema) {
     
-
     var ulSubtemas = document.getElementById("subtemas" + IdUlSubtema)  
     
     var subtema = document.createElement("li")
+    subtema.setAttribute("id", "liSubtema" + contadorParaIDSubtemas)
     ulSubtemas.insertBefore(subtema, ulSubtemas.lastElementChild)
     
-    
+    //Crear input para nombre subtema
     var inputNombreSubtema = document.createElement("input")
     inputNombreSubtema.setAttribute("type", "text")
     inputNombreSubtema.setAttribute("placeholder", "Nombre del subtema " + contadorParaIDSubtemas)
     inputNombreSubtema.setAttribute("id", "inputNombreSubtema" + contadorParaIDSubtemas)
     subtema.appendChild(inputNombreSubtema)
 
+    //crear input para horas
     var inputHorasSubtema = document.createElement("input")
     inputHorasSubtema.setAttribute("type", "number")
     inputHorasSubtema.setAttribute("placeholder", 0)
@@ -289,14 +315,14 @@ function CrearSubtema(IdUlSubtema) {
 
 
 function AgregarMateria(idMateria) {
-    debugger
+
     var nombre = document.getElementById("inputNombreMaterias" + idMateria).value
     var materiaNueva = new Materia(nombre)
     materias.push(materiaNueva)
 
 
     $("#inputNombreMaterias" + idMateria).replaceWith("<h2>" + materiaNueva.Nombre + "</h2>")
-    $("#botonConfirmarMateria" + idMateria).replaceWith('<img src="img/iconos/cruz.png" alt="cruz" id="cruz" onclick="QuitarMateria()">')
+    $("#botonConfirmarMateria" + idMateria).replaceWith('<a href="#"><img src="img/iconos/cruz.png" alt="cruz" class="cruz" onclick="QuitarMateria(' + idMateria + ')"></a>')
 
     //Reactivar el boton para crear una materia nueva despues de agregar una
     $("#crearMateriaNueva").removeAttr('disabled')
@@ -305,13 +331,18 @@ function AgregarMateria(idMateria) {
 }
 
 function QuitarMateria(indiceDeMateria) {
-    materias.splice(indiceDeMateria, 1)
+    materias[indiceDeMateria] = null
+    $("#materia" + indiceDeMateria).remove()
 }
 
 function SumarHorasTotales() {
+
     //Al inciar reseteo valor de variable para no repetir sumas
     TotalHoras = 0
     for (let indiceMaterias = 0; indiceMaterias < materias.length; indiceMaterias++) {
+        if(materias[indiceMaterias]==null){
+            continue
+        }
         TotalHoras += materias[indiceMaterias].TotalHorasMateria;
     }
     TotalHorasFaltantes = TotalHoras - TotalHorasLeidas
@@ -329,6 +360,9 @@ function SumarHorasLeidasTotales() {
 
 function SeleccionarMateriaPertenecienteAEsteTema(nombreDeLaMateria) {
     for (let index = 0; index < materias.length; index++) {
+        if (materias[index] == null) {
+            continue
+        }
         if (materias[index].Nombre == nombreDeLaMateria) {
             return index
         }      
@@ -340,20 +374,85 @@ function SeleccionarTemaPertenecienteAEsteSubtema(nombreDeLaMateria, nombreDelTe
     var indexMateria = SeleccionarMateriaPertenecienteAEsteTema(nombreDeLaMateria)
 
     for (let index = 0; index < materias[indexMateria].Temas.length; index++) {
+        if (materias[indexMateria].Temas[index] == null){
+            continue
+        }
         if (materias[indexMateria].Temas[index].Nombre == nombreDelTema) {
             return index
-        }  
-        console.log(index)    
+        }    
     }
 }
 
+function SeleccionarIndiceDeEsteSubtema(nombreDeLaMateria, nombreDelTema, nombreDelSubtema) {
+    var indexMateria = SeleccionarMateriaPertenecienteAEsteTema(nombreDeLaMateria)
+    var indexTema = SeleccionarTemaPertenecienteAEsteSubtema(nombreDeLaMateria, nombreDelTema)
+    for (let index = 0; index < materias[indexMateria].Temas[indexTema].Subtemas.length; index++) {
+        if (materias[indexMateria].Temas[indexTema].Subtemas[index] == null){
+            continue
+        }
+        if (materias[indexMateria].Temas[indexTema].Subtemas[index].Nombre == nombreDelSubtema) {
+            return index
+        }    
+    }
 
+}
 
+// Conteo de horas
 
+function CalcularHoras() {
+    for (let indexMaterias = 0; indexMaterias < materias.length; indexMaterias++) {
+        const mat = materias[indexMaterias]
+        if (mat == null) {
+            continue
+        }
+        for (let indexTemas = 0; indexTemas < mat.Temas.length; indexTemas++) {
+            const tem = mat.Temas[indexTemas];
+            if (tem == null) {
+                continue
+            }
+            for (let indexSubtemas = 0; indexSubtemas < tem.Subtemas.length; indexSubtemas++) {
+                const subtem = tem.Subtemas[indexSubtemas];
+                if (subtem == null) {
+                    continue
+                }
+
+                //FALTA subtema.Lei
+                
+  
+            }
+            tem.SumarTotalHorasTema()
+        }
+        mat.SumarTotalHorasMateria()
+    }
+    SumarHorasTotales()
+    console.log("El total de horas es: " + TotalHoras)
+}
+
+// Usar Api para citas que motivan
+
+function RecibirInspiracion(){
+    const settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://type.fit/api/quotes",
+        "method": "GET"
+      }
+
+      var numeroRandom = Math.floor(Math.random() * 1643) + 1; // returns a random integer from 1 to 100
+
+    
+      
+      $.ajax(settings).done(function (response) {
+        const data = JSON.parse(response);
+        alert(data[numeroRandom].text + " " + data[numeroRandom].author);
+      });
+
+      
+      
+}
 
 
 // 04.Storage
-
 
 
 function Guardar() {

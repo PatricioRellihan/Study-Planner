@@ -34,6 +34,13 @@ h1 {
     
 } */
 
-#cruz {
+.cruz {
     width: 1rem;
+}
+
+.liMateria {
+    background-color: aquamarine;
+    border-radius: 1rem;
+    padding:1rem;
+    margin: 1rem;
 }
