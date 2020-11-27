@@ -25,12 +25,11 @@ function Materia(nombre) {
     this.AgregarTema = function(idTema) {
 
 
-
-
-        //FALTA ALERT QUE NO PERMITA USAR ESTO SI LA MATERIA TODAVIA NO TIENE NOMBRE
-
-
         var nombre = document.getElementById("inputNombreTemas" + idTema).value
+        if (nombre == "") {
+            alert("El Tema debe tener un nombre válido")
+            return
+        }
         temaNuevo = new Tema(nombre)
         this.Temas.push(temaNuevo)
 
@@ -90,16 +89,19 @@ function Tema(nombre) {
     this.AgregarSubtema = function(idSubtema) {
 
         var nombre = document.getElementById("inputNombreSubtema" + idSubtema).value
+        if (nombre == "") {
+            alert("El subtema debe tener un nombre válido")
+            return
+        }
         var horas = Number(document.getElementById("inputHorasSubtema" + idSubtema).value)
         subtemaNuevo = new Subtema(nombre, horas)
         this.Subtemas.push(subtemaNuevo)
 
         $("#inputNombreSubtema" + idSubtema).replaceWith("<h4>" + subtemaNuevo.Nombre + "</h4>")
-        $("#inputHorasSubtema" + idSubtema).replaceWith("<h5>" + subtemaNuevo.Horas + " hs.</h5>")
+        $("#inputHorasSubtema" + idSubtema).replaceWith("<h5>   " + subtemaNuevo.Horas + " hs.</h5>")
 
         //Quitar boton confirmar y crear cruz para eliminar subtema
         var liSubtema = document.getElementById("liSubtema" + idSubtema)
-        debugger
         var nombreDeLaMateriaParent = liSubtema.parentNode.parentNode.parentNode.parentNode.firstChild.innerHTML
         var nombreDelTemaParent = liSubtema.parentNode.parentNode.firstChild.innerHTML
         var nombreDelSubtema = liSubtema.firstChild.innerHTML
@@ -317,6 +319,10 @@ function CrearSubtema(IdUlSubtema) {
 function AgregarMateria(idMateria) {
 
     var nombre = document.getElementById("inputNombreMaterias" + idMateria).value
+    if (nombre == "") {
+        alert("La materia debe tener un nombre válido")
+        return
+    }
     var materiaNueva = new Materia(nombre)
     materias.push(materiaNueva)
 

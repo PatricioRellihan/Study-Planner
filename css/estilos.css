@@ -1,8 +1,5 @@
-/* * {
-    margin: 0;
-    padding: 0;
-}
 
+/*
 html {
     background-color: rgb(230, 230, 230);
     font-family: 'Montserrat', sans-serif;
@@ -34,13 +31,55 @@ h1 {
     
 } */
 
+div {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+/* Imagen para borrar */
 .cruz {
     width: 1rem;
+    float: right;
 }
 
 .liMateria {
-    background-color: aquamarine;
+    max-width: 800px;
+    min-width: 25vw;
+    background-color: #8bdbf3;
     border-radius: 1rem;
     padding:1rem;
     margin: 1rem;
 }
+
+#materias {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+button {
+    margin: 0.5rem;
+}
+
+h2 {
+    display: inline-block;
+}
+
+h3 {
+    display: inline-block;
+}
+
+h4 {
+    display: inline-block;
+}
+
+h5 {
+    margin-left: 0.5rem;
+    display: inline-block;
+    color: #5c5c5c;
+}
+
+
+
+
