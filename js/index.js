@@ -462,18 +462,57 @@ function RecibirInspiracion(){
 
 
 function Guardar() {
+    //Guardar array de materias
     var copiaMaterias = materias
     materiasJSON = JSON.stringify(copiaMaterias)
     sessionStorage.setItem("materias", materiasJSON) 
+
+    //guardar elementos HTML
+    var body = document.body.innerHTML
+    sessionStorage.setItem("content", body)
+
+    //guardar variables de contadores
+    sessionTotalHoras = TotalHoras
+    sessionTotalHorasLeidas = TotalHorasLeidas
+    sessionTotalHorasFaltantes = TotalHorasFaltantes
+    sessionContadorParaUlTemas = contadorParaUlTemas
+    sessionContadorParaIdMaterias = contadorParaIdMaterias
+    sessionContadorParaUlSubtemas = contadorParaUlSubtemas
+    sessionContadorParaIdTemas = contadorParaIdTemas
+    sessionContadorParaIDSubtemas = contadorParaIDSubtemas
+
+    sessionStorage.setItem("TotalHoras", sessionTotalHoras)
+    sessionStorage.setItem("TotalHorasLeidas", sessionTotalHorasLeidas)
+    sessionStorage.setItem("TotalHorasFaltantes", sessionTotalHorasFaltantes)
+    sessionStorage.setItem("contadorParaUlTemas", sessionContadorParaUlTemas)
+    sessionStorage.setItem("contadorParaIdMaterias", sessionContadorParaIdMaterias)
+    sessionStorage.setItem("contadorParaUlSubtemas", sessionContadorParaUlSubtemas)
+    sessionStorage.setItem("contadorParaIdTemas", sessionContadorParaIdTemas)
+    sessionStorage.setItem("contadorParaIDSubtemas", sessionContadorParaIDSubtemas)
 }
 
 $( document ).ready(function() {
-    
+    debugger
     var materiasJSON = sessionStorage.getItem("materias")
-
     if (materiasJSON != null) {
-        
+        //Cargar materias
         materias = JSON.parse(materiasJSON)
+
+        //Cargar body en HTML
+        // var content = sessionStorage.getItem("content")
+        // var body = document.getElementsByName("body")[0]
+        document.body.innerHTML = sessionStorage.getItem("content")
+        // body.insertAdjacentHTML(sessionStorage["content"])
+
+        //Cargar valores de variables de contadores
+        TotalHoras = sessionStorage.getItem("TotalHoras")
+        TotalHorasLeidas = sessionStorage.getItem("TotalHorasLeidas")
+        TotalHorasFaltantes = sessionStorage.getItem("TotalHorasFaltantes")
+        contadorParaUlTemas = sessionStorage.getItem("contadorParaUlTemas")
+        contadorParaIdMaterias = sessionStorage.getItem("contadorParaIdMaterias")
+        contadorParaUlSubtemas = sessionStorage.getItem("contadorParaUlSubtemas")
+        contadorParaIdTemas = sessionStorage.getItem("contadorParaIdTemas")
+        contadorParaIDSubtemas = sessionStorage.getItem("contadorParaIDSubtemas")
     } 
     
 })
