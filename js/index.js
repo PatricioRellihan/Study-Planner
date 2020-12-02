@@ -496,7 +496,7 @@ $( document ).ready(function() {
     var materiasJSON = sessionStorage.getItem("materias")
     if (materiasJSON != null) {
         //Cargar materias
-        materias = JSON.parse(materiasJSON)
+        materiasCargadas = JSON.parse(materiasJSON)
 
         //Cargar body en HTML
         // var content = sessionStorage.getItem("content")
@@ -513,7 +513,50 @@ $( document ).ready(function() {
         contadorParaUlSubtemas = sessionStorage.getItem("contadorParaUlSubtemas")
         contadorParaIdTemas = sessionStorage.getItem("contadorParaIdTemas")
         contadorParaIDSubtemas = sessionStorage.getItem("contadorParaIDSubtemas")
+
+        // Inicializar los objetos guardados
+        
+        for (let indexMaterias = 0; indexMaterias < materiasCargadas.length; indexMaterias++) {
+            const mat = materiasCargadas[indexMaterias]
+    
+            var materiaNueva = new Materia(mat.Nombre)
+            materias.push(materiaNueva)
+            debugger
+            // if (mat == null) {
+            //     continue
+            // }
+            for (let indexTemas = 0; indexTemas < mat.Temas.length; indexTemas++) {
+                const tem = mat.Temas[indexTemas];
+                const temas = materias[indexMaterias].Temas;
+
+                temaNuevo = new Tema(tem.Nombre)
+                temas.push(temaNuevo)
+                // if (tem == null) {
+                //     continue
+                // }
+                for (let indexSubtemas = 0; indexSubtemas < tem.Subtemas.length; indexSubtemas++) {
+                    const subtem = tem.Subtemas[indexSubtemas];
+
+                    const subtemas = materias[indexMaterias].Temas[indexTemas].Subtemas;
+
+                    subtemaNuevo = new Subtema(subtem.Nombre, subtem.Horas)
+                    subtemas.push(subtemaNuevo)
+                    // if (subtem == null) {
+                    //     continue
+                    // }
+    
+                    debugger
+                    
+      
+                }
+    
+            }
+    
+        }
     } 
+
+    
+    
     
 })
 
