@@ -31,11 +31,11 @@ h1 {
     
 } */
 
-div {
+/* div {
     display: flex;
     justify-content: center;
     margin: auto;
-}
+} */
 
 /* Imagen para borrar */
 .cruz {
@@ -80,9 +80,18 @@ h5 {
     color: #5c5c5c;
 }
 
+.divBotones {
+    display: flex;
+    flex-direction: column;
+}
 
+.divBotones .btn {
+    margin: 0.5rem auto;
+}
 
-
+#barraProgreso {
+    display: none;
+}
 
 .inputHorasSubtema {
     width: 2rem;

@@ -6,6 +6,10 @@
 
 //Lista de Materias y funcion para agregar nuevas materias
 //Cada materia tendra anidados temas que a su vez tendran anidados subtemas
+
+//FALTA:
+//actualizar valores de input de horas al cargar
+
 materias = []
 TotalHoras = 0
 TotalHorasLeidas = 0
@@ -56,9 +60,10 @@ function Materia(nombre, contadorMateria) {
     }
 
     this.QuitarTema = function(indiceDeTema, idTema) {
-        this.Temas[indiceDeTema] = null
+        // this.Temas[indiceDeTema] = null
+        this.Temas.splice(indiceDeTema, 1)
+        CalcularHoras()
         $("#liTema" + idTema).remove()
-
     }
 
     this.SumarTotalHorasMateria = function() {
@@ -75,7 +80,6 @@ function Materia(nombre, contadorMateria) {
 
     this.SumarTotalHorasLeidasMateria = function() {
         //Al inciar reseteo valor de variable para no repetir sumas
-        debugger
         this.TotalHorasLeidasMateria = 0
         for (let indiceTemas = 0; indiceTemas < this.Temas.length; indiceTemas++) {
             if (this.Temas[indiceTemas] == null) {
@@ -151,8 +155,11 @@ function Tema(nombre, contadorTema) {
     }
     
     this.QuitarSubtema = function(indiceDeSubtema, idSubtema) {
-        this.Subtemas[indiceDeSubtema] = null
+        // this.Subtemas[indiceDeSubtema] = null
+        this.Subtemas.splice(indiceDeSubtema, 1)
+        CalcularHoras()
         $("#liSubtema" + idSubtema).remove()
+        
     }
 
     this.SumarTotalHorasTema = function() {
@@ -171,6 +178,9 @@ function Tema(nombre, contadorTema) {
         //Al inciar reseteo valor de variable para no repetir sumas
         this.TotalHorasLeidasTema = 0
         for (let indiceSubtemas = 0; indiceSubtemas < this.Subtemas.length; indiceSubtemas++) {
+            if (this.Subtemas[indiceSubtemas] == null) {
+                continue
+            }
             this.TotalHorasLeidasTema += this.Subtemas[indiceSubtemas].HorasLeidas; 
         }
         this.TotalHorasFaltantesTema = this.TotalHorasTema - this.TotalHorasLeidasTema
@@ -187,40 +197,50 @@ function Subtema(nombre, contadorSubtema) {
     this.ContadorSubtema = contadorSubtema
 
     this.Lei = function(idSubtema, indexTemaParent, indexMateriaParent) {
+        if (document.getElementById("inputHorasLeidasSubtema" + idSubtema) != null) {
+            
         
-        let horasLeidas = Number(document.getElementById("inputHorasLeidasSubtema" + idSubtema).value);
-        if (horasLeidas > this.Horas || horasLeidas < 0) {
-            alert("Las Horas Leidas no pueden ser mayor al total de horas. Tampoco pueden ser negativas")
-            document.getElementById("inputHorasLeidasSubtema" + idSubtema).value = 0
-            return
+            let horasLeidas = Number(document.getElementById("inputHorasLeidasSubtema" + idSubtema).value);
+            if (horasLeidas > this.Horas || horasLeidas < 0) {
+                alert("Las Horas Leidas no pueden ser mayor al total de horas. Tampoco pueden ser negativas")
+                document.getElementById("inputHorasLeidasSubtema" + idSubtema).value = 0
+                return
+            }
+            this.HorasLeidas = horasLeidas
+            this.HorasFaltantes = this.Horas - this.HorasLeidas
+
+            materias[indexMateriaParent].Temas[indexTemaParent].SumarTotalHorasLeidasTema()
+            materias[indexMateriaParent].SumarTotalHorasLeidasMateria()
+            SumarHorasLeidasTotales()
+
+            // actualizar Horas Leidas de los Temas y Materias en HTML
+            document.getElementById("inputHorasSubtema" + idSubtema).parentNode.parentNode.parentNode.childNodes[1].innerHTML = materias[indexMateriaParent].Temas[indexTemaParent].TotalHorasLeidasTema + "hs."
+            document.getElementById("inputHorasSubtema" + idSubtema).parentNode.parentNode.parentNode.parentNode.parentNode.childNodes[1].innerHTML = materias[indexMateriaParent].TotalHorasLeidasMateria + "hs."
         }
-        this.HorasLeidas = horasLeidas
-        this.HorasFaltantes = this.Horas - this.HorasLeidas
-
-        materias[indexMateriaParent].Temas[indexTemaParent].SumarTotalHorasLeidasTema()
-        materias[indexMateriaParent].SumarTotalHorasLeidasMateria()
-
-        // actualizar Horas Leidas de los Temas en HTML
-        document.getElementById("inputHorasSubtema" + idSubtema).parentNode.parentNode.parentNode.childNodes[1].innerHTML = materias[indexMateriaParent].Temas[indexTemaParent].TotalHorasLeidasTema + "hs."
     }
 
     this.HorasTotales = function(idSubtema, indexTemaParent, indexMateriaParent) {
 
-        let horas = Number(document.getElementById("inputHorasSubtema" + idSubtema).value)
-        if (this.HorasLeidas > horas || horas < 0) {
-            alert("El total de horas no puede ser menor al total de horas leídas. Tampoco pueden ser negativas")
-            document.getElementById("inputHorasSubtema" + idSubtema).value = 0
-            return
+        if (document.getElementById("inputHorasSubtema" + idSubtema) != null) {
+            
+        
+            let horas = Number(document.getElementById("inputHorasSubtema" + idSubtema).value)
+            if (this.HorasLeidas > horas || horas < 0) {
+                alert("El total de horas no puede ser menor al total de horas leídas. Tampoco pueden ser negativas")
+                document.getElementById("inputHorasSubtema" + idSubtema).value = 0
+                return
+            }
+            this.Horas = horas
+            this.HorasFaltantes = this.Horas - this.HorasLeidas
+
+            materias[indexMateriaParent].Temas[indexTemaParent].SumarTotalHorasTema()
+            materias[indexMateriaParent].SumarTotalHorasMateria()
+            SumarHorasTotales()
+
+            // actualizar Horas Totales de los Temas y materias en HTML
+            document.getElementById("inputHorasSubtema" + idSubtema).parentNode.parentNode.parentNode.childNodes[3].innerHTML = materias[indexMateriaParent].Temas[indexTemaParent].TotalHorasTema + "hs."
+            document.getElementById("inputHorasSubtema" + idSubtema).parentNode.parentNode.parentNode.parentNode.parentNode.childNodes[3].innerHTML = materias[indexMateriaParent].TotalHorasMateria + "hs."
         }
-        this.Horas = horas
-        this.HorasFaltantes = this.Horas - this.HorasLeidas
-
-        materias[indexMateriaParent].Temas[indexTemaParent].SumarTotalHorasTema()
-        materias[indexMateriaParent].SumarTotalHorasMateria()
-
-        // actualizar Horas Totales de los Temas en HTML
-        document.getElementById("inputHorasSubtema" + idSubtema).parentNode.parentNode.parentNode.childNodes[3].innerHTML = materias[indexMateriaParent].Temas[indexTemaParent].TotalHorasTema + "hs."
-
     }
     
 }
@@ -238,6 +258,9 @@ contadorParaUlTemas = 0
 contadorParaIdMaterias = 0
 function CrearMateria(){
         //Crear Materia con input para su nombre y boton para agregarlo
+        if (materias.length == 0) {
+            document.getElementById("barraProgreso").style.display = "block";
+        }
         var ulMaterias = document.getElementById("materias")
 
         var materia = document.createElement("li")
@@ -389,8 +412,12 @@ function AgregarMateria(idMateria) {
     var materiaNueva = new Materia(nombre, idMateria)
     materias.push(materiaNueva)
 
+    // reemplazar input de nombre materia por nombre fijo y horas
+    let horasLeidasMateriaEnHTML = "<h2 class='horasLeidasMateria' id='horasLeidasMateria" + idMateria + "'> 0 hs. </h2>"
+    let horasTotalesMateriaEnHTML = "<h2 class='horasTotalesMateria' id='horasTotalesMateria" + idMateria + "'> 0 hs. </h2>"
+    
 
-    $("#inputNombreMaterias" + idMateria).replaceWith("<h2>" + materiaNueva.Nombre + "</h2>")
+    $("#inputNombreMaterias" + idMateria).replaceWith("<h2>" + materiaNueva.Nombre + "</h2>" + horasLeidasMateriaEnHTML + "<h2>/</h2>" + horasTotalesMateriaEnHTML)
     $("#botonConfirmarMateria" + idMateria).replaceWith('<a href="#"><img src="img/iconos/cruz.png" alt="cruz" class="cruz" onclick="QuitarMateria(' + idMateria + ')"></a>')
 
     //Reactivar el boton para crear una materia nueva despues de agregar una
@@ -399,9 +426,16 @@ function AgregarMateria(idMateria) {
     
 }
 
-function QuitarMateria(indiceDeMateria) {
-    materias[indiceDeMateria] = null
-    $("#materia" + indiceDeMateria).remove()
+function QuitarMateria(contadorMateria) {
+    // materias[indiceDeMateria] = null
+    let indiceDeMateria = SeleccionarMateriaPertenecienteAEsteTema(contadorMateria)
+    materias.splice(indiceDeMateria, 1)
+    if (materias.length == 0) {
+        document.getElementById("barraProgreso").style.display = "none";  
+    }
+    CalcularHoras()
+    $("#materia" + contadorMateria).remove()
+    
 }
 
 function SumarHorasTotales() {
@@ -415,6 +449,8 @@ function SumarHorasTotales() {
         TotalHoras += materias[indiceMaterias].TotalHorasMateria;
     }
     TotalHorasFaltantes = TotalHoras - TotalHorasLeidas
+    let porcentaje = TotalHorasLeidas * 100 / TotalHoras
+    document.getElementById("progressBar").style = "width: " + porcentaje + "%"
 }
 
 function SumarHorasLeidasTotales() {
@@ -427,6 +463,8 @@ function SumarHorasLeidasTotales() {
         TotalHorasLeidas += materias[indiceMaterias].TotalHorasLeidasMateria; 
     }
     TotalHorasFaltantes = TotalHoras - TotalHorasLeidas
+    let porcentaje = TotalHorasLeidas * 100 / TotalHoras
+    document.getElementById("progressBar").style = "width: " + porcentaje + "%"
 }
 
 
@@ -471,13 +509,23 @@ function SeleccionarIndiceDeEsteSubtema(contadorMateria, contadorTema, contadorS
 // Conteo de horas
 
 function CalcularHoras() {
+    //Al inciar reseteo valor de variable para no repetir sumas
+    TotalHoras = 0
+    TotalHorasLeidas = 0
+    TotalHorasFaltantes = 0
     for (let indexMaterias = 0; indexMaterias < materias.length; indexMaterias++) {
-        const mat = materias[indexMaterias]
+        const mat = materias[indexMaterias];
+        mat.TotalHorasMateria = 0
+        mat.TotalHorasLeidasMateria = 0
+        mat.TotalHorasFaltantesMateria = 0
         if (mat == null) {
             continue
         }
         for (let indexTemas = 0; indexTemas < mat.Temas.length; indexTemas++) {
             const tem = mat.Temas[indexTemas];
+            tem.TotalHorasTema = 0
+            tem.TotalHorasLeidasTema = 0
+            tem.TotalHorasFaltantesTema = 0
             if (tem == null) {
                 continue
             }
@@ -491,11 +539,18 @@ function CalcularHoras() {
                 subtem.HorasTotales(indexSubtemas, indexTemas, indexMaterias)
   
             }
-            // tem.SumarTotalHorasTema()
-            // tem.SumarTotalHorasLeidasTema()
+            tem.SumarTotalHorasTema()
+            tem.SumarTotalHorasLeidasTema()
+            let idTema = tem.ContadorTema
+            document.getElementById("horasTotalesTema" + idTema).innerHTML = tem.TotalHorasTema + "hs."
+            document.getElementById("horasLeidasTema" + idTema).innerHTML = tem.TotalHorasLeidasTema + "hs."
+
         }
-        // mat.SumarTotalHorasMateria()
-        // mat.SumarTotalHorasLeidasMateria()
+        mat.SumarTotalHorasMateria()
+        mat.SumarTotalHorasLeidasMateria()
+        let idMateria = mat.ContadorMateria 
+        document.getElementById("horasTotalesMateria" + idMateria).innerHTML = mat.TotalHorasMateria + "hs."
+        document.getElementById("horasLeidasMateria" + idMateria).innerHTML = mat.TotalHorasLeidasMateria + "hs."
     }
     SumarHorasTotales()
     SumarHorasLeidasTotales()
@@ -619,8 +674,37 @@ $( document ).ready(function() {
             }
     
         }
+
+        //Mostrar la barra de progreso con el valor correcto
+        if (materias.length == 0) {
+            document.getElementById("barraProgreso").style.display = "none";
+        }
+        if (materias.length != 0) {
+            document.getElementById("barraProgreso").style.display = "block";  
+        }
+        let porcentaje = TotalHorasLeidas * 100 / TotalHoras
+        document.getElementById("progressBar").style = "width: " + porcentaje + "%"
+
+        //cargar los inputs de horas de subtemas que corresponden
+        
+        //Al inciar reseteo valor de variable para no repetir sumas
+        for (let indexMaterias = 0; indexMaterias < materias.length; indexMaterias++) {
+            const mat = materias[indexMaterias];
+            for (let indexTemas = 0; indexTemas < mat.Temas.length; indexTemas++) {
+                const tem = mat.Temas[indexTemas];
+                for (let indexSubtemas = 0; indexSubtemas < tem.Subtemas.length; indexSubtemas++) {
+                    const subtem = tem.Subtemas[indexSubtemas];
+                    idSubtema = subtem.ContadorSubtema
+                    inputHorasSubtema = subtem.Horas
+                    inputHorasLeidasSubtema = subtem.HorasLeidas
+    
+                    document.getElementById("inputHorasSubtema" + idSubtema).innerHTML = inputHorasSubtema
+                    document.getElementById("inputHorasLeidasSubtema" + idSubtema).innerHTML = inputHorasLeidasSubtema
+        
+                }
+            }
+        }
     } 
- 
 })
 
 
