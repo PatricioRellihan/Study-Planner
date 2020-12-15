@@ -562,54 +562,51 @@ function Guardar() {
     //Guardar array de materias
     var copiaMaterias = materias
     materiasJSON = JSON.stringify(copiaMaterias)
-    sessionStorage.setItem("materias", materiasJSON) 
+    localStorage.setItem("materias", materiasJSON) 
 
     //guardar elementos HTML
     var body = document.body.innerHTML
-    sessionStorage.setItem("content", body)
+    localStorage.setItem("content", body)
 
     //guardar variables de contadores
-    sessionTotalHoras = TotalHoras
-    sessionTotalHorasLeidas = TotalHorasLeidas
-    sessionTotalHorasFaltantes = TotalHorasFaltantes
-    sessionContadorParaUlTemas = contadorParaUlTemas
-    sessionContadorParaIdMaterias = contadorParaIdMaterias
-    sessionContadorParaUlSubtemas = contadorParaUlSubtemas
-    sessionContadorParaIdTemas = contadorParaIdTemas
-    sessionContadorParaIDSubtemas = contadorParaIDSubtemas
+    localTotalHoras = TotalHoras
+    localTotalHorasLeidas = TotalHorasLeidas
+    localTotalHorasFaltantes = TotalHorasFaltantes
+    localContadorParaUlTemas = contadorParaUlTemas
+    localContadorParaIdMaterias = contadorParaIdMaterias
+    localContadorParaUlSubtemas = contadorParaUlSubtemas
+    localContadorParaIdTemas = contadorParaIdTemas
+    localContadorParaIDSubtemas = contadorParaIDSubtemas
 
-    sessionStorage.setItem("TotalHoras", sessionTotalHoras)
-    sessionStorage.setItem("TotalHorasLeidas", sessionTotalHorasLeidas)
-    sessionStorage.setItem("TotalHorasFaltantes", sessionTotalHorasFaltantes)
-    sessionStorage.setItem("contadorParaUlTemas", sessionContadorParaUlTemas)
-    sessionStorage.setItem("contadorParaIdMaterias", sessionContadorParaIdMaterias)
-    sessionStorage.setItem("contadorParaUlSubtemas", sessionContadorParaUlSubtemas)
-    sessionStorage.setItem("contadorParaIdTemas", sessionContadorParaIdTemas)
-    sessionStorage.setItem("contadorParaIDSubtemas", sessionContadorParaIDSubtemas)
+    localStorage.setItem("TotalHoras", localTotalHoras)
+    localStorage.setItem("TotalHorasLeidas", localTotalHorasLeidas)
+    localStorage.setItem("TotalHorasFaltantes", localTotalHorasFaltantes)
+    localStorage.setItem("contadorParaUlTemas", localContadorParaUlTemas)
+    localStorage.setItem("contadorParaIdMaterias", localContadorParaIdMaterias)
+    localStorage.setItem("contadorParaUlSubtemas", localContadorParaUlSubtemas)
+    localStorage.setItem("contadorParaIdTemas", localContadorParaIdTemas)
+    localStorage.setItem("contadorParaIDSubtemas", localContadorParaIDSubtemas)
 }
 
 $( document ).ready(function() {
     
-    var materiasJSON = sessionStorage.getItem("materias")
+    var materiasJSON = localStorage.getItem("materias")
     if (materiasJSON != null) {
         //Cargar materias
         materiasCargadas = JSON.parse(materiasJSON)
 
         //Cargar body en HTML
-        // var content = sessionStorage.getItem("content")
-        // var body = document.getElementsByName("body")[0]
-        document.body.innerHTML = sessionStorage.getItem("content")
-        // body.insertAdjacentHTML(sessionStorage["content"])
+        document.body.innerHTML = localStorage.getItem("content")
 
         //Cargar valores de variables de contadores
-        TotalHoras = sessionStorage.getItem("TotalHoras")
-        TotalHorasLeidas = sessionStorage.getItem("TotalHorasLeidas")
-        TotalHorasFaltantes = sessionStorage.getItem("TotalHorasFaltantes")
-        contadorParaUlTemas = sessionStorage.getItem("contadorParaUlTemas")
-        contadorParaIdMaterias = sessionStorage.getItem("contadorParaIdMaterias")
-        contadorParaUlSubtemas = sessionStorage.getItem("contadorParaUlSubtemas")
-        contadorParaIdTemas = sessionStorage.getItem("contadorParaIdTemas")
-        contadorParaIDSubtemas = sessionStorage.getItem("contadorParaIDSubtemas")
+        TotalHoras = localStorage.getItem("TotalHoras")
+        TotalHorasLeidas = localStorage.getItem("TotalHorasLeidas")
+        TotalHorasFaltantes = localStorage.getItem("TotalHorasFaltantes")
+        contadorParaUlTemas = localStorage.getItem("contadorParaUlTemas")
+        contadorParaIdMaterias = localStorage.getItem("contadorParaIdMaterias")
+        contadorParaUlSubtemas = localStorage.getItem("contadorParaUlSubtemas")
+        contadorParaIdTemas = localStorage.getItem("contadorParaIdTemas")
+        contadorParaIDSubtemas = localStorage.getItem("contadorParaIDSubtemas")
 
         // Inicializar los objetos guardados en el array materias
         for (let indexMaterias = 0; indexMaterias < materiasCargadas.length; indexMaterias++) {
