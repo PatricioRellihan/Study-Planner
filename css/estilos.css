@@ -1,43 +1,49 @@
-
-/*
 html {
-    background-color: rgb(230, 230, 230);
+    background-color:  #F9F9ED;
     font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: #F9F9ED;
 }
 
 li {
     list-style: none;
+    margin: 4px;
 }
 
-h1 {
-    padding: 2rem;
-}
-.materias {
-    display: flex;
-    justify-content: center;
-    padding: 1rem;
+.tituloTema {
+    margin-right: 0.5rem;
 }
 
-.materias li {
-    background-color: #81C2FE;
-    border-radius: 1rem;
-    margin: 1rem;
-    padding: 1rem;
-    width: 20%;
-   
-}
-
-.temas li {
-    
-} */
-
-/* div {
-    display: flex;
-    justify-content: center;
+/* REPASAR*/
+.divTituloMateria {
+    display: inline-block;
     margin: auto;
-} */
+    margin-left: 12px;
+}
 
-/* Imagen para borrar */
+.horasLeidasMateria {
+    text-align: right;
+}
+
+/*horas tema*/
+.divTituloTema {
+    display: inline-block;
+    position: absolute;
+    margin-left: 1rem;
+    margin-right: 8px;
+    right: 50px;
+}
+
+/*horas subtema*/
+.divTituloSubtema {
+    display: inline-block;
+    position: absolute;
+    margin-left: 1rem;
+    right: 50px;
+}
+
 .cruz {
     width: 1rem;
     float: right;
@@ -45,39 +51,59 @@ h1 {
 
 .liMateria {
     max-width: 800px;
-    min-width: 25vw;
-    background-color: #8bdbf3;
-    border-radius: 1rem;
+    min-width: 45%;
+    background-color: #1E7CAE;
+    border-radius: .4rem;
     padding:1rem;
     margin: 1rem;
+    box-shadow: 8px 8px 16px 2px rgba(0,0,0,0.3);
+}
+
+.list-group-item {
+    background: #fff;
 }
 
 #materias {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    padding: 0;
 }
 
-button {
-    margin: 0.5rem;
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    margin-top: 2rem;
 }
 
 h2 {
     display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: white;;
 }
 
 h3 {
     display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+
 }
 
 h4 {
     display: inline-block;
+    font-family: 'Montserrat', sans-serif;
 }
 
 h5 {
     margin-left: 0.5rem;
     display: inline-block;
-    color: #5c5c5c;
+    font-family: 'Montserrat', sans-serif;
+    color: #616161;
+    margin: 0;
+}
+
+#crearMateriaNueva {
+    margin-bottom: 1.5rem;
 }
 
 .divBotones {
@@ -93,10 +119,87 @@ h5 {
     display: none;
 }
 
+.progress {
+    margin-bottom: 1.5rem;
+}
+
+.progress-bar {
+    background-color: #7ADFBB;
+}
+
 .inputHorasSubtema {
     width: 2rem;
 }
 
+.horasTotales {
+    display: flex;
+    margin: auto;
+}
+
+.list-group ul li {
+    padding-top: 6px;
+    padding-left: 12px;
+    margin-right: 6px;
+    border-top: solid #c9c9c9 1px;
+}
+
+button {
+    margin: 0.5rem;
+    background-color: #90b1c2;
+    border-color: #5c5c5c;
+    color: white;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+button:hover {
+    background-color: #759db1;
+}
+
+.barrita {
+    margin-right: 1rem;
+}
+
+input {
+    border-radius: .4rem;
+    border: none;
+}
+
+input[type=text] {
+    padding: 6px 0;
+}
+
+.horasLeidasTema {
+    font-weight: 500;
+    font-size: large;
+}
+
+.horasTotalesTema {
+    font-weight: 500;
+    font-size: large;
+}
+
+@media (max-width: 768px) {
+    /*horas tema*/
+    .divTituloTema {
+        position: static;
+        margin-left: 1rem;
+    }
+
+    /*horas subtema*/
+    .divTituloSubtema {
+        position: static;
+        margin-left: 1rem;  
+    }
+
+}
 
 
 
